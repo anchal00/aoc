@@ -72,7 +72,6 @@ with open("day1_input.txt", "r") as input_file:
             dialer += offset
         else:
             dialer -= offset
-            if dialer < 0: dialer += 100
 
         dialer %= 100
         password += dialer == 0
