@@ -11,4 +11,5 @@ def get_max_joltage(battery_bank):
 with open("day3_input.txt", "r") as input_file:
     for battery_bank in input_file.readlines():
         joltage += get_max_joltage(battery_bank)
+
 print(joltage)
