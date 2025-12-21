@@ -1,4 +1,3 @@
-import heapq
 import math
 
 class DSU:
@@ -14,6 +13,12 @@ class DSU:
 
         self._parents[pt] = self.find_parent(parent)
         return self._parents[pt]
+
+    def get_remaining_individual_points(self):
+        remaining = []
+        for i in range(len(self._points)):
+            if self.find_parent(i) == i: remaining.append(self._points[i])
+        return remaining
 
     def union(self, point_a, point_b):
         parent_of_a = self.find_parent(point_a)
@@ -45,6 +50,7 @@ with open("day8_input.txt", "r") as input_file:
     for line in input_file.readlines():
         points.append(tuple(map(int, line.strip().split(","))))
 
+
     points_and_distances = []
     for i in range(len(points)):
         for j in range(i+1, len(points)):
@@ -52,20 +58,21 @@ with open("day8_input.txt", "r") as input_file:
             point2 = points[j]
             d = get_euclidean_dist(point1, point2)
 
-            heapq.heappush(points_and_distances, (-d, (i,j)))
+            points_and_distances.append([d, (i, j)])
 
-            if len(points_and_distances) > 1000: heapq.heappop(points_and_distances)
+    points_and_distances.sort(key=lambda x: x[0])
 
     dsu = DSU(points)
+
+    final_points = []
     for entry in points_and_distances:
         pt_a, pt_b = entry[1]
+
         dsu.union(pt_a, pt_b)
 
-    true_components = []
-    for i, val in enumerate(dsu._size):
-        if dsu.find_parent(i) != i: continue
-        true_components.append(val)
-
-    final_list = sorted(true_components, reverse=True)
-
-    print(math.prod(final_list[:3]))
+        rem_after_union = dsu.get_remaining_individual_points()
+        if len(rem_after_union) == 1:
+            final_points.append(points[pt_a])
+            final_points.append(points[pt_b])
+    
+    print(final_points[0][0] * final_points[1][0])
