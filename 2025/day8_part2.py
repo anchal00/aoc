@@ -74,5 +74,6 @@ with open("day8_input.txt", "r") as input_file:
         if len(rem_after_union) == 1:
             final_points.append(points[pt_a])
             final_points.append(points[pt_b])
+            break
     
     print(final_points[0][0] * final_points[1][0])
